@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    background: #f2f2f2;
+}
+
+.guess-row {
+    margin: 10px 0;
+}
+
+.letter {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    margin: 2px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 5px;
+    color: white;
+    font-size: 24px;
+}
+
+.green {
+    background-color: green;
+}
+
+.yellow {
+    background-color: goldenrod;
+}
+
+.gray {
+    background-color: gray;
+}
+
+form input {
+    padding: 10px;
+    font-size: 18px;
+    width: 120px;
+    text-align: center;
+}
+
+form button {
+    padding: 10px 20px;
+    font-size: 18px;
+    margin-left: 10px;
+}
+
+.error {
+    color: red;
+}
+
+.message {
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.message.win {
+    color: green;
+}
+
+.message.lose {
+    color: red;
+}

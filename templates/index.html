@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Wordle</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Zaka's Wordle App</h1>
+
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% for row in feedback %}
+    <div class="guess-row">
+        {% for color, letter in row %}
+        <span class="letter {{ color }}">{{ letter }}</span>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+    {% if not gameover %}
+    <form method="POST">
+        <input name="guess" maxlength="5" required autofocus autocomplete="off">
+        <button type="submit">Guess</button>
+    </form>
+    {% else %}
+        {% if won %}
+        <p class="message win">🎉 You win!</p>
+        {% else %}
+        <p class="message lose">😢 Game Over! The word was <strong>{{ answer }}</strong>.</p>
+        {% endif %}
+        <a href="/reset">Play Again</a>
+    {% endif %}
+</body>
+</html>
