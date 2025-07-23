@@ -12,26 +12,38 @@
     <p class="error">{{ error }}</p>
     {% endif %}
 
-    {% for row in feedback %}
-    <div class="guess-row">
-        {% for color, letter in row %}
-        <span class="letter {{ color }}">{{ letter }}</span>
+    <!-- Word Grid -->
+    <div class="grid">
+        {% for row_index in range(5) %}
+        <div class="guess-row">
+            {% if row_index < feedback|length %}
+                {% set row = feedback[row_index] %}
+                {% for color, letter in row %}
+                <span class="letter {{ color }}">{{ letter }}</span>
+                {% endfor %}
+            {% else %}
+                {% for _ in range(5) %}
+                <span class="letter empty"></span>
+                {% endfor %}
+            {% endif %}
+        </div>
         {% endfor %}
     </div>
-    {% endfor %}
 
+    <!-- Keyboard -->
     <h3>Keyboard</h3>
     <div class="keyboard">
         {% set layout = ["qwertyuiop", "asdfghjkl", "zxcvbnm"] %}
         {% for row in layout %}
-    <div class="key-row">
-        {% for key in row %}
-        <span class="key {{ keyboard[key] }}">{{ key.upper() }}</span>
+        <div class="key-row">
+            {% for key in row %}
+            <span class="key {{ keyboard[key] }}">{{ key.upper() }}</span>
+            {% endfor %}
+        </div>
         {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
+    <!-- Input Form or Game Result -->
     {% if not gameover %}
     <form method="POST">
         <input name="guess" maxlength="5" required autofocus autocomplete="off">
