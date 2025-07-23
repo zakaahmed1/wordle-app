@@ -35,6 +35,18 @@ def evaluate_guess(guess, answer):
 
     return result
 
+def update_keyboard(keyboard, feedback):
+    # Update keyboard colors based on feedback
+    for row in feedback:
+        for color, letter in row:
+            if color == "green":
+                keyboard[letter] = "green"
+            elif color == "yellow" and keyboard.get(letter) != "green":
+                keyboard[letter] = "yellow"
+            elif color == "gray" and keyboard.get(letter) not in ("green", "yellow"):
+                keyboard[letter] = "gray"
+    return keyboard
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if "answer" not in session:
@@ -45,26 +57,31 @@ def index():
         session["gameover"] = False
         session["won"] = False
 
+    error = None
+
     if request.method == "POST":
         guess = request.form["guess"].lower()
 
         if len(guess) != WORD_LENGTH or guess not in WORD_LIST:
-            return render_template("index.html", error="Invalid guess.", **session)
+            error = "Invalid guess."
+        else:
+            feedback = evaluate_guess(guess, session["answer"])
+            session["guesses"].append(guess)
+            session["feedback"].append(feedback)
+            session["turns"] += 1
 
-        feedback = evaluate_guess(guess, session["answer"])
-        session["guesses"].append(guess)
-        session["feedback"].append(feedback)
-        session["turns"] += 1
+            if all(color == 'green' for color, _ in feedback):
+                session["gameover"] = True
+                session["won"] = True
+            elif session["turns"] >= MAX_TURNS:
+                session["gameover"] = True
 
-        if all(color == 'green' for color, _ in feedback):
-            session["gameover"] = True
-            session["won"] = True
-        elif session["turns"] >= MAX_TURNS:
-            session["gameover"] = True
+            return redirect("/")  # Only redirect if valid guess
 
-        return redirect("/")
+    # ✅ Always update keyboard using session["feedback"]
+    keyboard = update_keyboard({ch: "" for ch in "abcdefghijklmnopqrstuvwxyz"}, session.get("feedback", []))
 
-    return render_template("index.html", **session)
+    return render_template("index.html", keyboard=keyboard, error=error, **session)
 
 @app.route("/reset")
 def reset():

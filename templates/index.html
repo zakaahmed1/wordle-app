@@ -20,6 +20,18 @@
     </div>
     {% endfor %}
 
+    <h3>Keyboard</h3>
+    <div class="keyboard">
+        {% set layout = ["qwertyuiop", "asdfghjkl", "zxcvbnm"] %}
+        {% for row in layout %}
+    <div class="key-row">
+        {% for key in row %}
+        <span class="key {{ keyboard[key] }}">{{ key.upper() }}</span>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
     {% if not gameover %}
     <form method="POST">
         <input name="guess" maxlength="5" required autofocus autocomplete="off">
